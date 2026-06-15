@@ -26,6 +26,7 @@ export async function connectDB(retries = 3, delay = 1000): Promise<typeof mongo
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
+      serverSelectionTimeoutMS: 5000,
     };
 
     cached.promise = mongoose.connect(MONGODB_URI!, opts).catch((err) => {
@@ -43,7 +44,7 @@ export async function connectDB(retries = 3, delay = 1000): Promise<typeof mongo
       cached.promise = null;
       if (i < retries - 1) {
         await sleep(delay);
-        cached.promise = mongoose.connect(MONGODB_URI!, { bufferCommands: false }).catch((e) => {
+        cached.promise = mongoose.connect(MONGODB_URI!, { bufferCommands: false, serverSelectionTimeoutMS: 5000 }).catch((e) => {
           cached.promise = null;
           throw e;
         });
