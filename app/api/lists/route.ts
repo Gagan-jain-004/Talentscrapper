@@ -4,6 +4,8 @@ import { List } from '@/lib/models/List';
 import { Candidate } from '@/lib/models/Candidate'; // Ensure Candidate model is loaded in Mongoose Registry
 import { verifySessionToken } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const token = request.cookies.get('recruiter_auth')?.value;

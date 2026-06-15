@@ -4,6 +4,8 @@ import { List } from '@/lib/models/List';
 import { Candidate } from '@/lib/models/Candidate';
 import { verifySessionToken } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const token = request.cookies.get('recruiter_auth')?.value;

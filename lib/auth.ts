@@ -1,5 +1,3 @@
-const ACCESS_PIN = process.env.ACCESS_PIN || '';
-
 /**
  * Computes a SHA-256 hash using the environment's native Crypto API.
  * Compatible with Edge Middleware and standard Node.js environments.
@@ -15,8 +13,9 @@ async function sha256(message: string): Promise<string> {
  * Creates an authenticated session token valid for 7 days.
  */
 export async function createSessionToken(): Promise<string> {
+  const pin = process.env.ACCESS_PIN || '';
   const expiresAt = Date.now() + 7 * 24 * 60 * 60 * 1000; // 7 days in ms
-  const hash = await sha256(`${expiresAt}:${ACCESS_PIN}`);
+  const hash = await sha256(`${expiresAt}:${pin}`);
   return `${expiresAt}.${hash}`;
 }
 
@@ -35,6 +34,7 @@ export async function verifySessionToken(token: string | undefined): Promise<boo
     return false; // Expired or malformed timestamp
   }
 
-  const expectedHash = await sha256(`${expiresAtStr}:${ACCESS_PIN}`);
+  const pin = process.env.ACCESS_PIN || '';
+  const expectedHash = await sha256(`${expiresAtStr}:${pin}`);
   return hash === expectedHash;
 }

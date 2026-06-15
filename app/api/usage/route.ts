@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getUsage, PROVIDER_LIMITS } from '@/lib/usageTracker';
 import { verifySessionToken } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const token = request.cookies.get('recruiter_auth')?.value;
