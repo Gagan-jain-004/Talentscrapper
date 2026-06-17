@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, History, Loader2, X } from 'lucide-react';
 import { SearchHistoryType } from '@/types/search';
+import { triggerToast } from './Toast';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -88,6 +89,24 @@ export default function SearchBar({ onSearch, isLoading, initialValue = '' }: Se
     setShowHistory(false);
   };
 
+  const handleClearHistory = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      const res = await fetch('/api/search/history', {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        setHistory([]);
+        triggerToast('Search history cleared', 'success');
+      } else {
+        triggerToast('Failed to clear search history', 'error');
+      }
+    } catch (err) {
+      console.error('Failed to clear search history:', err);
+      triggerToast('Failed to clear search history', 'error');
+    }
+  };
+
   return (
     <div className="relative w-full max-w-3xl mx-auto" ref={dropdownRef}>
       <form onSubmit={handleSubmit} className="relative flex items-center">
@@ -141,9 +160,18 @@ export default function SearchBar({ onSearch, isLoading, initialValue = '' }: Se
       {/* Suggestion / History Dropdown */}
       {showHistory && history.length > 0 && (
         <div className="absolute left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl z-30 max-h-64 overflow-y-auto py-2.5 animate-fade-in">
-          <div className="flex items-center gap-1.5 px-4 pb-2 border-b border-slate-50 dark:border-slate-800 mb-1 text-[10px] sm:text-xs font-bold text-slate-400 tracking-wider uppercase select-none">
-            <History className="w-3.5 h-3.5" />
-            <span>Recent Searches</span>
+          <div className="flex items-center justify-between px-4 pb-2 border-b border-slate-50 dark:border-slate-800 mb-1">
+            <div className="flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-slate-400 tracking-wider uppercase select-none">
+              <History className="w-3.5 h-3.5" />
+              <span>Recent Searches</span>
+            </div>
+            <button
+              type="button"
+              onClick={handleClearHistory}
+              className="text-[10px] sm:text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline transition-colors"
+            >
+              Clear All
+            </button>
           </div>
 
           {history.map((hist) => (

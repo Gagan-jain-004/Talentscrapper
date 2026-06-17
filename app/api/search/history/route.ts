@@ -23,3 +23,21 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const token = request.cookies.get('recruiter_auth')?.value;
+    const isAuthorized = await verifySessionToken(token);
+    if (!isAuthorized) {
+      return NextResponse.json({ error: 'Unauthorized access.' }, { status: 401 });
+    }
+
+    await connectDB();
+    await SearchHistory.deleteMany({});
+
+    return NextResponse.json({ success: true, message: 'Search history cleared.' });
+  } catch (error: any) {
+    console.error('DELETE Search History API Route error:', error.message || error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}
