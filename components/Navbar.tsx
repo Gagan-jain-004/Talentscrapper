@@ -58,17 +58,17 @@ export default function Navbar() {
 
   const mobileLinkClass = (path: string) => {
     const isActive = pathname === path;
-    return `flex flex-col items-center justify-center gap-0.5 w-1/2 h-full text-xs font-bold transition-all ${
+    return `flex flex-col items-center justify-center gap-0.5 px-5 py-1.5 rounded-full text-[10px] font-extrabold transition-all duration-200 ${
       isActive
-        ? 'text-blue-600 dark:text-blue-400'
-        : 'text-slate-500 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-400'
+        ? 'text-blue-600 dark:text-blue-400 bg-blue-50/75 dark:bg-blue-950/40'
+        : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
     }`;
   };
 
   return (
     <>
       {/* Top Navbar */}
-      <header className="sticky top-0 z-40 w-full bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-850 px-4 md:px-8 h-16 flex items-center justify-between shadow-sm">
+      <header className="sticky top-0 z-40 w-full bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-900 px-4 md:px-8 h-16 flex items-center justify-between shadow-sm">
         {/* Left: Brand */}
         <Link href="/" className="flex items-center gap-2 text-slate-800 dark:text-slate-100 select-none">
           <div className="bg-gradient-to-tr from-blue-600 to-indigo-600 text-white p-1.5 rounded-lg shadow-md shadow-blue-500/20">
@@ -114,16 +114,18 @@ export default function Navbar() {
       </header>
 
       {/* Bottom Nav Bar (Mobile only) */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/95 dark:bg-slate-950/95 backdrop-blur border-t border-slate-200 dark:border-slate-850 shadow-[0_-4px_12px_rgba(0,0,0,0.04)] flex items-center z-40 pb-safe">
-        <Link href="/" className={mobileLinkClass('/')}>
-          <Search className="w-5.5 h-5.5" />
-          <span>Search</span>
-        </Link>
-        <Link href="/lists" className={mobileLinkClass('/lists')}>
-          <ListTodo className="w-5.5 h-5.5" />
-          <span>Lists</span>
-        </Link>
-      </nav>
+      <div className="md:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-40 w-[85%] max-w-xs bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border border-slate-200/50 dark:border-slate-800/50 rounded-full py-1.5 px-3 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.3)]">
+        <nav className="flex items-center justify-around">
+          <Link href="/" className={mobileLinkClass('/')}>
+            <Search className="w-4.5 h-4.5" />
+            <span>Search</span>
+          </Link>
+          <Link href="/lists" className={mobileLinkClass('/lists')}>
+            <ListTodo className="w-4.5 h-4.5" />
+            <span>Lists</span>
+          </Link>
+        </nav>
+      </div>
     </>
   );
 }
